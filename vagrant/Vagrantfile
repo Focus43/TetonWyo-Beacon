@@ -11,20 +11,20 @@ Vagrant.configure("2") do |config|
     # Memory available for the virtual machine
     :memory_cap => '384',
     # Install Redis?
-    :redis => true,
+    :redis => false,
     # Install NodeJS?
     :nodejs => {
       :install => true,
-      :gruntjs => false
+      :gruntjs => true
     },
     # Web settings
     :web => {
       # Port to forward from vagrant -> your machine (eg: http://localhost:8080)
-      :http_port => {:from => 3000, :to => 3000},
+      :http_port => {:from => 80, :to => 8080},
       # Install a server? options: 'nginx', 'apache', or false for none (ie. false to use Rails internal server)
-      :server => false,
+      :server => 'nginx',
       # Only applicable if :server = 'nginx|apache'
-      :doc_root => '/home/vagrant/app'
+      :doc_root => '/home/vagrant/app/application'
     },
     # Ruby settings for this box (using rbenv, to install more rubies, modify per-project)
     :ruby_settings => {
