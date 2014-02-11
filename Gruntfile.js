@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         concat: {
             mainjs: {
                 files: {
-                    'application/compiled/main.js' : ['application/dev/main.js']
+                    'application/compiled/main.js' : ['application/dev/json_shim.js', 'application/dev/main.js']
                 }
             }
         },

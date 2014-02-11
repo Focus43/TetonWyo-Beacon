@@ -48,6 +48,9 @@ Vagrant.configure("2") do |config|
     }
   }
 
+  # CUSTOM ADDITION FOR THIS PROJECT, TO MOCK CROSS-DOMAIN CALLS
+  config.vm.network :forwarded_port, guest: 3030, host: 3030, auto_correct: true
+
 
   ##################################################################################
   ### REMAINING VAGRANT STUFF : USUALLY DON'T NEED TO DO ANYTHING!
