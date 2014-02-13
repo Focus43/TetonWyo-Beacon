@@ -6,8 +6,39 @@
 var TwyoBeacon = (function(){
 
     var _cookieName = 'tyo_beacon',
-        _pixelURI   = '//tyo.asset:3030/pixel_trk.gif',
-        _metaTag    = document.getElementById('tyo-beacon');
+        _pixelURI   = '//tc.tstr.co/scripts/twbeacon.ashx', //'//tyo.asset:3030/pixel_trk.gif';
+        _dataCache;
+
+
+    /**
+     * Check in 3 different sources for the page data to append to the cookie. First the tyoBeaconData hash,
+     * then the tyo-beacon meta tag, then fall back to using the document title and current domain.
+     * @returns {*}
+     */
+    function _dataSrc(){
+        if( ! _dataCache ){
+            // check window.tyoBeaconData
+            if( typeof(window.tyoBeaconData) !== 'undefined' && window.tyoBeaconData.constructor === {}.constructor ){
+                _dataCache = window.tyoBeaconData;
+                return _dataCache;
+            }
+            // check if meta tag exists and use it
+            var metaTag = document.getElementById('tyo-beacon');
+            if( typeof(metaTag) !== 'undefined' && metaTag !== null ){
+                _dataCache = {
+                    t : metaTag.getAttribute('data-title'),
+                    u : metaTag.getAttribute('content')
+                };
+                return _dataCache;
+            }
+            // if nothing hits above; use page title and URL
+            _dataCache = {
+                t : document.title,
+                u : window.location.protocol + '//' + window.location.hostname
+            };
+        }
+        return _dataCache;
+    }
 
 
     /**
@@ -17,12 +48,7 @@ var TwyoBeacon = (function(){
     function parseCurrent(){
         var parts = document.cookie.split(_cookieName + '=');
         if(parts.length === 2){
-            var list  = parts.pop().split(";").shift(),
-                parsd = JSON.parse( decodeURIComponent(list) );
-            for( var _i = 0; _i < parsd.length; _i++ ){
-                parsd[_i].t = decodeURIComponent(parsd[_i].t);
-            }
-            return parsd;
+            return JSON.parse(parts.pop().split(";").shift());
         }
         return [];
     }
@@ -33,11 +59,9 @@ var TwyoBeacon = (function(){
      * onload and onerror callbacks), *IF* meta tag is defined.
      */
     (function( pixelSource ){
-        if( typeof(_metaTag) !== 'undefined' && _metaTag !== null ){
-            var _pixel  = new Image(),
-                _params = '?t=' + _metaTag.getAttribute('data-title') + '&' + 'u=' + _metaTag.getAttribute('content');
-            _pixel.src  = encodeURI((location.protocol === 'https:' ? 'https:' : 'http:') + pixelSource + _params);
-        }
+        var _pixel  = new Image(),
+            _params = '?t=' + _dataSrc().t + '&' + 'u=' + _dataSrc().u + '&allow=true';
+        _pixel.src  = encodeURI((location.protocol === 'https:' ? 'https:' : 'http:') + pixelSource + _params);
     })( _pixelURI );
 
 

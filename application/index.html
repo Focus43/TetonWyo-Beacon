@@ -2,19 +2,25 @@
 <html>
 <head>
     <title>Page Name</title>
-    <meta id="tyo-beacon" name="tyo-beacon" data-title="Page Name" content="">
+    <!--<meta id="tyo-beacon" name="tyo-beacon" data-title="Page Namification" content="http://testable.com">
     <script type="text/javascript">
         try {
             document.getElementById('tyo-beacon').setAttribute('content', document.URL);
         }catch(e){
             console.log(e);
         }
+    </script>-->
+    <script type="text/javascript">
+        document.title = 'Page ' + Math.random(0, 10000000);
     </script>
 </head>
 <body>
 
     <p>Web beacon</p>
 
+<script>
+    //var tyoBeaconData = {t: 'Page Namez', u: 'http://www.tetonparksandrecz.org'};
+</script>
 <script type="text/javascript" src="http://tyo.asset:3030/compiled/main.js"></script>
 </body>
 </html>
